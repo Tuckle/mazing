@@ -1,9 +1,11 @@
 from .exceptions import ExceptionHandler
 from .users import blueprint as users_blueprint
+from .mazes import blueprint as mazes_blueprint
 
 
 def register_blueprints(app):
     app.register_blueprint(users_blueprint)
+    app.register_blueprint(mazes_blueprint)
 
 
 def register_error_handler(app):

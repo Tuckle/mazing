@@ -1,3 +1,5 @@
+from sqlalchemy import PrimaryKeyConstraint, ForeignKeyConstraint
+
 from .base import db, DBUtil
 from api.core import Mixin
 
@@ -6,8 +8,12 @@ class UserMazes(Mixin, DBUtil, db.Model):
     """UserMazes Table."""
 
     __tablename__ = "usermazes"
+    __table_args__ = (
+        PrimaryKeyConstraint('user', 'maze', name='user_maze_pk'),
+        # ForeignKeyConstraint(['user', 'maze'], ['user.id', 'maze.id'])
+    )
 
-    id = db.Column(db.Integer, unique=True, primary_key=True)
+    # id = db.Column(db.Integer, unique=True, primary_key=True)
     user = db.Column(
         db.Integer, db.ForeignKey("user.id")
     )
