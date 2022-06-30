@@ -6,9 +6,34 @@ class InvalidMazeException(Exception):
 
 
 def solve_maze(entrance, grid_size, walls):
-    width, height = list(map(int, grid_size.split('x')))
-    start_from = (ord(entrance[0]) - 64, int(entrance[1:]))
-    walls = set(map(lambda x: (ord(x[0]) - 64, int(x[1:])), walls))
+    """
+    Compute longest and shortest paths through given maze.
+    :param entrance: Starting point in maze, e.g. A1
+    :param grid_size: width and height of the maze separated by 'x', e.g. 8x8
+    :param walls:
+    :return:
+    """
+    # check validity of parameters
+    try:
+        width, height = list(map(int, grid_size.split('x')))
+    except ValueError:
+        raise InvalidMazeException("Invalid gridSize")
+    try:
+        start_from = (ord(entrance[0]) - 64, int(entrance[1:]))
+    except ValueError:
+        raise InvalidMazeException("Invalid entrance.")
+    try:
+        walls = set(map(lambda x: (ord(x[0]) - 64, int(x[1:])), walls))
+    except ValueError:
+        raise InvalidMazeException("Invalid wall.")
+    try:
+        assert width + height > 2 and width > 0 and height > 0, "Invalid gridSize."
+        assert 1 <= start_from[0] <= width, "Invalid entrance."
+        assert 1 <= start_from[1] <= height, "Invalid entrance."
+        for wall in walls:
+            assert 1 <= wall[0] <= width, "Invalid wall."
+    except AssertionError as aer:
+        raise InvalidMazeException(str(aer))
 
     queue = collections.deque()
     path_ = [start_from]
@@ -33,7 +58,7 @@ def solve_maze(entrance, grid_size, walls):
             exits.add(path[-1])
 
             if len(exits) > 1:  # maze not allowed to have multiple valid exit points
-                raise InvalidMazeException("Maze does not have an unique exit point!")
+                raise InvalidMazeException("Maze does not have an unique exit point.")
             continue
 
         for x2, y2 in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
@@ -56,7 +81,7 @@ def solve_maze(entrance, grid_size, walls):
             chr(x[0] + 64), x[1]
         ), max_path))
     if not min_path and not max_path:
-        raise InvalidMazeException("No valid path found in maze!")
+        raise InvalidMazeException("No valid path found in maze.")
 
     return min_path, max_path
 

@@ -15,6 +15,7 @@ def create_user():
 
     try:
         assert data.get("username"), "No username provided for user."
+        assert all([x.isalnum() for x in data["username"]]), "Invalid character in username."
         assert data.get("password"), "No password provided for user."
     except AssertionError as aer:
         return create_response(status=422, message=str(aer))
@@ -48,7 +49,7 @@ def login_user():
     access_token = create_access_token(identity=str(user.id))
     # refresh_token = create_refresh_token(identity=data['username'])
 
-    return create_response(data={
+    return jsonify({
         'username': data['username'],
         'access_token': access_token,
         # 'refresh_token': refresh_token

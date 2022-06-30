@@ -1,9 +1,7 @@
-import traceback
-
 import sqlalchemy.exc
-from flask import Blueprint, request, Response, jsonify
+from flask import Blueprint, request, jsonify
 from api.models import Maze, UserMazes, db, User
-from api.core import create_response, serialize_list
+from api.core import create_response
 from flask_cors import CORS, cross_origin
 from flask_jwt_extended import jwt_required, get_jwt
 from api.lib.maze import InvalidMazeException, solve_maze
@@ -25,11 +23,11 @@ def create_or_get_maze():
             for key in ["entrance", "gridSize", "walls"]:
                 assert key in data and data[key], f"No {key} provided"
                 defaults[key] = data[key]
-            assert "A" <= data["entrance"][0] <= "Z", "Invalid entrance row character"
+            assert "A" <= data["entrance"][0] <= "Z", "Invalid entrance."
             try:
                 int(data["entrance"][1:])
             except ValueError:
-                raise AssertionError("Invalid entrance column number")
+                raise AssertionError("Invalid entrance.")
 
             grid = data["gridSize"]
             assert "x" in grid, "Invalid gridSize format"
@@ -55,15 +53,15 @@ def create_or_get_maze():
         try:
             db.session.add(user_maze)
             db.session.commit()
-        except sqlalchemy.exc.IntegrityError:
-            return create_response(message="Entry already exists.")
-        return create_response(message="Maze successfully added.")
+        except Exception:
+            db.session.rollback()
+            return create_response(data={"id": maze.id}, message="Entry already exists.")
+        return create_response(data={"id": maze.id}, message="Maze successfully added.")
 
     elif request.method == "GET":
         # return all mazes id for current user
-        mazes = db.session.query(Maze.id).filter(
-            User.id == user
-        ).filter(UserMazes.user == User.id).filter(UserMazes.maze == Maze.id).all()
+        mazes = db.session.query(Maze.id).join(UserMazes).filter(
+            UserMazes.user == User.id).filter(UserMazes.maze == Maze.id).all()
         return jsonify({
             "mazes": list(map(lambda x: x[0], mazes))
         })
@@ -80,15 +78,21 @@ def get_maze_solution(maze):
     user = int(info["sub"])
 
     try:
-        assert steps, "No steps parameter given"
-        assert steps in {"min", "max"}, "Invalid steps value"
+        maze = int(maze)
+        assert maze >= 1
+    except (ValueError, AssertionError):
+        return create_response(status=422, message="Invalid maze.")
+
+    try:
+        assert steps, "No steps parameter given."
+        assert steps in {"min", "max"}, "Invalid steps value."
     except AssertionError as aer:
         return create_response(status=422, message=str(aer))
 
     try:
-        maze = db.session.query(Maze).filter(
+        maze = db.session.query(Maze).join(UserMazes).filter(
             UserMazes.user == user
-        ).filter(UserMazes.maze == maze).filter(Maze.id == maze).all()[0]
+        ).filter(Maze.id == maze).all()[0]
         assert maze
     except (sqlalchemy.exc.NoResultFound, IndexError, AssertionError) as aer:
         return create_response(status=404)

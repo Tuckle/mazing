@@ -1,4 +1,5 @@
 import os
+from urllib.parse import quote_plus as urlquote
 
 _current_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -19,8 +20,7 @@ class Config:
 
 class DevelopmentConfig(Config):
     url = (
-        "postgres://eyrsyqluzmciea:366bef3f59412fd0f68567bb94a80db812c6e60098e2d1be9061ef42af128904@ec2-63-34-180-86."
-        "eu-west-1.compute.amazonaws.com:5432/da2dp7hqo03dto"
+        f"postgresql://postgres:{urlquote('P@ssw0rd')}@localhost:5432/postgres"
     )
     SQLALCHEMY_DATABASE_URI = url
     DEBUG = True
