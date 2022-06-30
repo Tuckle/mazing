@@ -29,7 +29,7 @@ class DevelopmentConfig(Config):
 class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get(
         "DATABASE_URL"
-    )  # you may do the same as the development config but this currently gets the database URL from an env variable
+    ).replace('postgres', 'postgresql')
     DEBUG = False
 
 
