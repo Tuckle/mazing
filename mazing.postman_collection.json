@@ -1,0 +1,190 @@
+{
+	"info": {
+		"_postman_id": "4c1b0344-fedb-49b3-9de3-ffdaa497f426",
+		"name": "mazing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "create user",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"sushi\",\r\n    \"password\": \"sasha\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/user",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login user",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"sushi\",\r\n    \"password\": \"sasha\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/login",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create maze",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY1NjUxNDc4OCwianRpIjoiYjA3MWI2MGMtOGI1ZS00ZDQ5LWFiNjEtYWFlZDQ0YzMwZWI3IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE2NTY1MTQ3ODgsImV4cCI6MTY1NjUxNTY4OH0.Y6IopjxfJj6CxZc9SmY-NXifu02Zo4DWFNX0BBaoVZ0",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"entrance\":  \"A1\",\r\n\"gridSize\": \"8x8\",\r\n\"walls\": [\"C1\", \"G1\", \"A2\", \"C2\", \"E2\", \"G2\", \"C3\", \"E3\", \"B4\", \"C4\", \"E4\", \"F4\", \"G4\", \"B5\", \"E5\", \"B6\", \"D6\", \"E6\", \"G6\", \"H6\", \"B7\", \"D7\", \"G7\", \"B8\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/maze",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"maze"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get maze solution",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY1NjUxNjEwNiwianRpIjoiOWM4Njc3MDYtZWYwMi00YWFkLWEwZDYtYTE2MWM2YjEwMzM0IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE2NTY1MTYxMDYsImV4cCI6MTY1NjUxNzAwNn0.1-1xj4N0aZlFh6ECZ8HtjKVTpqbrMIpgHjzZiD2r3w8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/maze/1/solution?steps=min",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"maze",
+						"1",
+						"solution"
+					],
+					"query": [
+						{
+							"key": "steps",
+							"value": "min"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get mazes",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY1NjUxNjEwNiwianRpIjoiOWM4Njc3MDYtZWYwMi00YWFkLWEwZDYtYTE2MWM2YjEwMzM0IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE2NTY1MTYxMDYsImV4cCI6MTY1NjUxNzAwNn0.1-1xj4N0aZlFh6ECZ8HtjKVTpqbrMIpgHjzZiD2r3w8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/maze",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"maze"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
